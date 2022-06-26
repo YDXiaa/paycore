@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.5.RELEASE</version>
+    </parent>
+
+    <groupId>paydemo</groupId>
+    <artifactId>paycore</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>facade</module>
+        <module>service</module>
+        <module>biz</module>
+        <module>dao</module>
+        <module>web</module>
+        <module>common</module>
+        <module>manager</module>
+    </modules>
+
+    <properties>
+        <system.moudle.version>1.0-SNAPSHOT</system.moudle.version>
+        <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
+        <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
+        <spring.cloud.alibaba.version>2.2.0.RELEASE</spring.cloud.alibaba.version>
+        <dubbo.version>2.7.6</dubbo.version>
+        <dubbo.nacos.version>2.7.6</dubbo.nacos.version>
+        <lombok.version>1.18.4</lombok.version>
+        <mysql.version>8.0.16</mysql.version>
+        <mybatis.plus.version>3.4.2</mybatis.plus.version>
+        <druid.version>1.1.15</druid.version>
+        <gson.version>2.8.5</gson.version>
+        <guava.version>28.2-jre</guava.version>
+        <common-pool.version>2.0</common-pool.version>
+        <xxl-job.version>2.3.0</xxl-job.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--SystemMoudle-->
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>facade</artifactId>
+                <version>${system.moudle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>service</artifactId>
+                <version>${system.moudle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>biz</artifactId>
+                <version>${system.moudle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>manager</artifactId>
+                <version>${system.moudle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>dao</artifactId>
+                <version>${system.moudle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>common</artifactId>
+                <version>${system.moudle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>web</artifactId>
+                <version>${system.moudle.version}</version>
+            </dependency>
+
+            <!-- Spring cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring cloud Alibaba-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba</artifactId>
+                <version>${spring.cloud.alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <!-- SpringBootConfigurationProcessor -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring.boot.version}</version>
+                <optional>true</optional>
+            </dependency>
+            <!-- Dubbo -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Dubbo Registry Nacos -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-nacos</artifactId>
+                <version>${dubbo.nacos.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>fastjson</artifactId>
+                        <groupId>com.alibaba</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>commons-io</artifactId>
+                        <groupId>commons-io</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- lombok-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <!-- MybatisPlus-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+
+            <!-- Gson-->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+
+            <!-- Google Guava-->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!--xxlJob-->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
