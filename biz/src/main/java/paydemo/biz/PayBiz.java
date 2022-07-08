@@ -4,7 +4,8 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import paydemo.biz.mq.MessageProducer;
+import paydemo.manager.mq.rocketmq.MessageProducer;
+import paydemo.manager.helper.ChannelDetailAccumulateHelper;
 import paydemo.common.*;
 import paydemo.common.exception.PayException;
 import paydemo.common.exception.ResponseCodeEnum;
@@ -43,6 +44,9 @@ public class PayBiz extends AbstractPayBiz<PayRequestBO> {
 
     @Autowired
     private MessageProducer messageProducer;
+
+    @Autowired
+    private ChannelDetailAccumulateHelper accumulateHelper;
 
     /**
      * 支付前置处理.
@@ -155,9 +159,10 @@ public class PayBiz extends AbstractPayBiz<PayRequestBO> {
             // 执行远程调用,调用各个资金系统.
             RemotePayResult remotePayResult = doRemotePayProcess(payFundBO);
 
-            payResponseBO.setPayStatus(remotePayResult.getPayStatusEnum().getStatusCode());
+            payResponseBO.setPayStatus(remotePayResult.getPayStatus());
             payResponseBO.setResultCode(remotePayResult.getResultCode());
             payResponseBO.setResultDesc(remotePayResult.getResultDesc());
+            payResponseBO.setChannelDetailNo(remotePayResult.getChannelDetailNo());
 
             // 判断执行结果，如果支付状态为支付中、支付失败，需要冲正支付资金单.
             if (isExecRevoke(remotePayResult, i, totalPayFundCnt)) {
@@ -235,13 +240,13 @@ public class PayBiz extends AbstractPayBiz<PayRequestBO> {
      */
     private boolean isExecRevoke(RemotePayResult remotePayResult, int seq, int totalFundCnt) {
         // 支付失败, 第一笔失败直接或者总资金单只有一笔.
-        if (PayStatusEnum.FAIL.equals(remotePayResult.getPayStatusEnum())) {
+        if (PayStatusEnum.FAIL.getStatusCode().equals(remotePayResult.getPayStatus())) {
             return seq != 1 && totalFundCnt != 1;
             // 支付中但是不为最后一笔需要冲正.
-        } else if (PayStatusEnum.PAYING.equals(remotePayResult.getPayStatusEnum()) && seq != totalFundCnt) {
+        } else if (PayStatusEnum.PAYING.getStatusCode().equals(remotePayResult.getPayStatus()) && seq != totalFundCnt) {
             return true;
             // 为最后一笔PAYING不需要
-        } else return PayStatusEnum.PAYING.equals(remotePayResult.getPayStatusEnum());
+        } else return PayStatusEnum.PAYING.getStatusCode().equals(remotePayResult.getPayStatus());
     }
 
     /**
@@ -282,7 +287,9 @@ public class PayBiz extends AbstractPayBiz<PayRequestBO> {
             }
         }
 
-        // 发送Rocket MQ消息给其他系统.
-        messageProducer.publishMessage();
+        //  发送事件消息.
+        accumulateHelper.accumulateChannelDetail(payResponseBO.getPayStatus(),payResponseBO.getChannelDetailNo());
+        // 发送kafka消息.
+
     }
 }

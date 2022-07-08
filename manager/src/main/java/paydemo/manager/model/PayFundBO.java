@@ -48,6 +48,11 @@ public class PayFundBO implements Comparable<PayFundBO> {
     private long refundAmt;
 
     /**
+     * 渠道手续费.
+     */
+    private long channelFeeAmt;
+
+    /**
      * 支付创建时间.
      */
     private Date payCreateDate;
@@ -73,9 +78,29 @@ public class PayFundBO implements Comparable<PayFundBO> {
     private String payStatus;
 
     /**
-     * 通道编号.
+     * 渠道编号.
      */
-    private String channelNo;
+    private String channelDetailNo;
+
+    /**
+     * 外部请求流水号.
+     */
+    private String outRequestSeqNo;
+
+    /**
+     * 外部响应流水号.
+     */
+    private String outRespSeqNo;
+
+    /**
+     * 全路径包名.
+     */
+    private String classPackageName;
+
+    /**
+     * 类方法名.
+     */
+    private String methodName;
 
     /**
      * 支付单号顺序

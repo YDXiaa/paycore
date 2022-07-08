@@ -4,13 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import paydemo.common.PayStatusEnum;
 import paydemo.common.SysConstant;
 import paydemo.dao.dbmodel.PayFundDO;
+import paydemo.dao.dbmodel.PayOrderDO;
 import paydemo.dao.mapper.PayFundMapper;
 import paydemo.dao.mapper.TableNameHelper;
+import paydemo.manager.helper.BeanCopier;
+import paydemo.manager.model.PayFundBO;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @auther YDXiaa
@@ -58,4 +63,28 @@ public class PayFundManager {
     }
 
 
+    /**
+     * 修改支付资金单状态.
+     *
+     * @param payFundBO 支付资金单单DO.
+     * @return 修改数量.
+     */
+    public int modifyPayFundStatus(PayFundBO payFundBO,PayStatusEnum origPayStatusEnum) {
+
+        PayFundDO payFundDO = BeanCopier.objCopy(payFundBO,PayFundDO.class);
+
+        TableNameHelper.setShardingMark(payFundDO.getPayFundNo());
+        LambdaUpdateWrapper<PayFundDO> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(PayFundDO::getPayStatus, payFundDO.getPayStatus())
+                .set(Objects.nonNull(payFundDO.getOutRequestSeqNo()),PayFundDO::getOutRequestSeqNo,payFundDO.getOutRequestSeqNo())
+                .set(Objects.nonNull(payFundDO.getOutRespSeqNo()),PayFundDO::getOutRespSeqNo,payFundDO.getOutRespSeqNo())
+                .set(Objects.nonNull(payFundDO.getChannelDetailNo()),PayFundDO::getChannelDetailNo,payFundDO.getChannelDetailNo())
+                .set(Objects.nonNull(payFundDO.getChannelFeeAmt()),PayFundDO::getChannelFeeAmt,payFundDO.getChannelFeeAmt())
+                .set(PayFundDO::getUpdateDate, new Date())
+                .set(PayFundDO::getUpdateUser, SysConstant.SYS_USER)
+                .eq(PayFundDO::getPayFundNo, payFundDO.getPayFundNo())
+                .eq(PayFundDO::getPayStatus,origPayStatusEnum.getStatusCode()); // 乐观锁.
+
+        return payFundMapper.update(payFundDO, updateWrapper);
+    }
 }

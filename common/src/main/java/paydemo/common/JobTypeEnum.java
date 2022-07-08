@@ -15,7 +15,13 @@ public enum JobTypeEnum {
     /**
      * 支付冲正.
      */
-    PAY_REVOKE("PAY_REVOKE", "支付冲正");
+    PAY_REVOKE("PAY_REVOKE", "支付冲正"),
+
+    /**
+     * MQ消息重试.
+     */
+    MQ_RETRY_SEND("MQ_RETRY_SEND","MQ消息重试"),
+    ;
 
     /**
      * JobTypeCode.

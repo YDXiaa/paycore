@@ -34,7 +34,7 @@ public class PayJobDetailCreator {
      * @return 作业详情单.
      */
     public static PayJobDetailDO createPayJobDetailDO(String jobDetailId, String jobType, Long jobExecuteInterval) {
-        return createPayJobDetailDO(jobDetailId, jobType, jobExecuteInterval, SysConstant.JOB_DEFAULT_EXECUTE_TIMES);
+        return createPayJobDetailDO(jobDetailId, null, jobType, jobExecuteInterval, SysConstant.JOB_DEFAULT_EXECUTE_TIMES);
     }
 
 
@@ -47,11 +47,12 @@ public class PayJobDetailCreator {
      * @param maxRetry           最大重试次数.
      * @return 作业详情单.
      */
-    public static PayJobDetailDO createPayJobDetailDO(String jobDetailId, String jobType, Long jobExecuteInterval, Long maxRetry) {
+    public static PayJobDetailDO createPayJobDetailDO(String jobDetailId, String jobDetailDesc, String jobType, Long jobExecuteInterval, Long maxRetry) {
 
         PayJobDetailDO payJobDetailDO = new PayJobDetailDO();
 
         payJobDetailDO.setJobDetailId(jobDetailId);
+        payJobDetailDO.setJodDetailDesc(jobDetailDesc);
         payJobDetailDO.setJobType(jobType);
         payJobDetailDO.setExecInterval(jobExecuteInterval);
         payJobDetailDO.setFailRetryTimes(maxRetry);

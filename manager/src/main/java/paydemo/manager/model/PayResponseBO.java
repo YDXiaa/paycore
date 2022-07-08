@@ -32,6 +32,11 @@ public class PayResponseBO {
     private Date payCompletedDate;
 
     /**
+     * 渠道号.
+     */
+    private String channelDetailNo;
+
+    /**
      * 支付状态.
      */
     private String payStatus;

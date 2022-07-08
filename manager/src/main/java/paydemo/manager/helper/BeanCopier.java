@@ -17,6 +17,32 @@ import java.util.stream.Collectors;
 public final class BeanCopier {
 
     /**
+     * instance.
+     */
+    public static final BeanCopier beanCopier = new BeanCopier();
+
+    /**
+     * getInstance.
+     *
+     * @return instance.
+     */
+    public static BeanCopier getInstance() {
+        return beanCopier;
+    }
+
+    /**
+     * 对象拷贝.
+     *
+     * @param sourceObj 源对象.
+     * @param targetObj 目标对象.
+     */
+    public BeanCopier copy(final Object sourceObj, final Object targetObj) {
+        BeanUtils.copyProperties(sourceObj, targetObj);
+        return beanCopier;
+    }
+
+
+    /**
      * 对象拷贝.
      *
      * @param sourceObj   源对象.
@@ -33,6 +59,16 @@ public final class BeanCopier {
         } catch (InstantiationException | IllegalAccessException e) {
             throw new PayException(ResponseCodeEnum.SYS_ERROR);
         }
+    }
+
+    /**
+     * 对象拷贝.
+     *
+     * @param sourceObj 源对象.
+     * @param targetObj 目标对象.
+     */
+    public static void objCopy(final Object sourceObj, final Object targetObj) {
+        BeanUtils.copyProperties(sourceObj, targetObj);
     }
 
     /**

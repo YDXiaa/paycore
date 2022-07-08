@@ -19,7 +19,7 @@ public class BalancePayProcessor implements PayProcessor {
     public RemotePayResult pay(PayFundBO payFundBO) {
         // mock返回结果
         RemotePayResult remotePayResult = new RemotePayResult();
-        remotePayResult.setPayStatusEnum(PayStatusEnum.SUCCESS);
+        remotePayResult.setPayStatus(PayStatusEnum.SUCCESS.getStatusCode());
 
         return remotePayResult;
     }

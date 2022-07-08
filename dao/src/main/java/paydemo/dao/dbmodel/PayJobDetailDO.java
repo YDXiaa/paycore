@@ -26,6 +26,12 @@ public class PayJobDetailDO extends BaseDO {
     private String jobDetailId;
 
     /**
+     * jobDetailDesc.
+     */
+    @TableField("job_detail_desc")
+    private String jodDetailDesc;
+
+    /**
      * 作业类型.
      */
     @TableField("job_type")

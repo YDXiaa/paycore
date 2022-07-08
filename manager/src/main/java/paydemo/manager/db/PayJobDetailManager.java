@@ -35,6 +35,15 @@ public class PayJobDetailManager {
     }
 
     /**
+     * 插入JobDetail.
+     *
+     * @param payJobDetailDO 作业任务单.
+     */
+    public void addJobDetail(PayJobDetailDO payJobDetailDO) {
+        payJobDetailMapper.insert(payJobDetailDO);
+    }
+
+    /**
      * 查询满足条件作业单.
      *
      * @param shardingMark 分片标记位.

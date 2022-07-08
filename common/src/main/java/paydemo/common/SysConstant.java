@@ -13,6 +13,11 @@ public class SysConstant {
     public static final String SYS_USER = "SYSTEM";
 
     /**
+     * 固定方法名.
+     */
+    public static final String FIXED_SERVICE_NAME = "service";
+
+    /**
      * 系统默认任务执行次数
      */
     public static final Long JOB_DEFAULT_EXECUTE_TIMES = 5L;

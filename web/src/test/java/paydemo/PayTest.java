@@ -6,10 +6,7 @@ import java.util.UUID;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import paydemo.common.BizLineEnum;
-import paydemo.common.PaySubToolEnum;
-import paydemo.common.PayToolEnum;
-import paydemo.common.PayTypeEnum;
+import paydemo.common.*;
 import paydemo.facade.PayServiceFacade;
 import paydemo.facade.model.PayFundRequestDTO;
 import paydemo.facade.model.PayRequestDTO;
@@ -41,8 +38,9 @@ public class PayTest extends BaseSpringBootSupport{
         PayFundRequestDTO alipayFundRequestDTO = new PayFundRequestDTO();
         alipayFundRequestDTO.setPayAmt(100L);
         alipayFundRequestDTO.setPayTool(PayToolEnum.THIRD_PAY.getPayToolCode());
-        alipayFundRequestDTO.setPaySubTool(PaySubToolEnum.ALIPAY.getPaySubToolCode());
+        alipayFundRequestDTO.setPaySubTool(PaySubToolEnum.WECHATPAY.getPaySubToolCode());
         alipayFundRequestDTO.setPayType(PayTypeEnum.PAY.getPayTypeCode());
+        alipayFundRequestDTO.setBizType(BizTypeEnum.PC_ONLINE.getBizTypeCode());
 
 
         PayFundRequestDTO marktingFundRequestDTO = new PayFundRequestDTO();

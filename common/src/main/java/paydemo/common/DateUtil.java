@@ -1,10 +1,10 @@
 package paydemo.common;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @auther YDXiaa
@@ -28,7 +28,6 @@ public final class DateUtil {
      */
     public static final String TIME_PATTERN_8 = "yyyyMMdd";
 
-
     /**
      * 解析日期.
      *
@@ -50,19 +49,23 @@ public final class DateUtil {
     }
 
     /**
-     * 解析日期.
+     * 按照指定日期格式解析Date日期.
      *
      * @param date    日期.
      * @param pattern 样式.
      * @return 日期格式.
      */
     public static String parseDate(final Date date, final String pattern) {
-        Instant instant = date.toInstant();
-        ZoneId zone = ZoneId.systemDefault();
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
-        return formatLocalDateTime(localDateTime, pattern);
+        return formatLocalDateTime(createLocalDateTimeOfDate(date), pattern);
     }
 
+    /**
+     * localDateTime解析为指定日期格式.
+     *
+     * @param dateTime dateTime.
+     * @param pattern  pattern.
+     * @return 指定日期格式显示.
+     */
     private static String formatLocalDateTime(final LocalDateTime dateTime, String pattern) {
         return dateTime.format(DateTimeFormatter.ofPattern(pattern));
     }
@@ -75,6 +78,40 @@ public final class DateUtil {
      * @return 指定秒数后的日期对象.
      */
     public static Date after(Date date, Long afterSeconds) {
-        return date;
+        LocalDateTime afterLocalDateTime = createLocalDateTimeOfDate(date).plusSeconds(afterSeconds);
+        return Date.from(afterLocalDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 是否在此时间之前.
+     *
+     * @param date date.
+     * @return 比较结果.
+     */
+    public static boolean isBeforeNow(final Date date) {
+
+        return createLocalDateTimeOfDate(date).isBefore(LocalDateTime.now());
+    }
+
+
+    /**
+     * 是否在此时间之后.
+     *
+     * @param date date.
+     * @return 比较结果.
+     */
+    public static boolean isAfterNow(final Date date) {
+
+        return createLocalDateTimeOfDate(date).isAfter(LocalDateTime.now());
+    }
+
+    /**
+     * 创建默认LocalDateTime对象.
+     *
+     * @param date date.
+     * @return localDateTime.
+     */
+    public static LocalDateTime createLocalDateTimeOfDate(final Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 }

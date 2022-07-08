@@ -23,11 +23,34 @@ public enum RedisKeyEnum {
     PAYCORE_PAYNO("PAYCORE_PAY_NO", "支付单号生成"),
 
     /**
+     * 渠道请求流水号.
+     */
+    PAYCORE_CHANNEL_SEQ_NO("PAYCORE_CHANNEL_SEQ_NO", "渠道请求流水号"),
+
+    /**
      * 支付资金单号key.
      */
     PAYCORE_PAY_FUND_NO("PAYCORE_PAY_FUND_NO", "支付资金单单号生成"),
 
-    ;
+    /**
+     * 渠道成功率.
+     */
+    PAYCORE_SUCCESS_RATE("PAYCORE_SUCCESS_RATE", "渠道成功率"),
+
+    /**
+     * 支付成功数量subKey.
+     */
+    SUCCESS_CNT("SUCCESS_CNT", "支付成功笔数subKey"),
+
+    /**
+     * 支付成功数量subKey.
+     */
+    PAYING_CNT("PAYING_CNT", "支付中笔数subKey"),
+
+    /**
+     * 支付失败数量subKey.
+     */
+    FAIL_CNT("FAIL_CNT", "支付失败笔数subKey");
 
     /**
      * 前缀编码.

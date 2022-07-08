@@ -44,6 +44,27 @@ public enum ResponseCodeEnum {
      * 非预计的数据库更新数量.
      */
     UNEXPECTED_UPDATE_CNT("UNEXPECTED_UPDATE_CNT", "非预计的数据库更新数量"),
+
+    /**
+     * 可用路由渠道不存在.
+     */
+    USABLE_CHANNEL_NOT_EXISTS("USABLE_CHANNEL_NOT_EXISTS", "路由渠道为空,请重新选择支付方式"),
+
+    /**
+     * 请求渠道超时.
+     */
+    REQUEST_CHANNEL_TIMEOUT("REQUEST_CHANNEL_TIMEOUT", "请求渠道超时"),
+
+    /**
+     * 请求渠道异常.
+     */
+    REQUEST_CHANNEL_EXCEPTION("REQUEST_CHANNEL_EXCEPTION", "请求渠道异常"),
+
+    /**
+     * 手续费计算模式错误.
+     */
+    FEE_CAL_MODE_ERROR("FEE_CAL_MODE_ERROR","手续费计算模式错误"),
+
     ;
 
     /**

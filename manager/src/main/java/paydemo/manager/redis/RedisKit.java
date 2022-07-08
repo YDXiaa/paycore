@@ -6,6 +6,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import paydemo.common.VerifyUtil;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,6 +51,32 @@ public class RedisKit {
         VerifyUtil.verifyRequiredField(key);
 
         return redisTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * hash结构存储.
+     *
+     * @param hashKey    hashKey
+     * @param hashSubKey hashSubKey
+     * @param addIncr    incr.
+     */
+    public void saveCache4Hash(String hashKey, String hashSubKey, Long addIncr, Long timeOut) {
+
+        Long incrResult = redisTemplate.opsForHash().increment(hashKey, hashSubKey, addIncr);
+        // todo 有可能是第一次赋值,其他RedisHashKey已经存在,暂时这样处理.
+        if (incrResult == 1) {
+            redisTemplate.expire(hashKey, timeOut, TimeUnit.SECONDS);
+        }
+    }
+
+    /**
+     * hash结构存储.
+     *
+     * @param hashKey     hashKey.
+     * @param hashSubKeys hashSubKeys.
+     */
+    public List<Object> findCache4Hash(String hashKey, String... hashSubKeys) {
+        return redisTemplate.opsForHash().multiGet(hashKey, Arrays.asList(hashSubKeys));
     }
 
     // --------------自增流水号----------------

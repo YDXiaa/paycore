@@ -42,4 +42,23 @@ public class PaySeqNoCreator {
 
         return StringsExt.joinStrWithEmpty(payReqDate, bizCode, payTypeServiceCode, seq);
     }
+
+    /**
+     * 创建渠道请求序列号.
+     *
+     * @param requestDate 请求日期.
+     * @param seqLength   序列号长度.
+     * @return 渠道请求序列号.
+     */
+    public String createChannelSeqNo(Date requestDate, Long seqLength) {
+
+        // yyyyMMddHHmmss(14位)
+        String payReqDate = DateUtil.parseDateWith14(requestDate);
+
+        // 16位自增流水号号.
+        String seq = StringsExt.padZeroLeft(redisKit.incrSeq(RedisKeyEnum.PAYCORE_CHANNEL_SEQ_NO.getRedisKeyCode()),
+                seqLength.intValue() - 14);
+
+        return StringsExt.joinStrWithEmpty(payReqDate, seq);
+    }
 }

@@ -85,3 +85,21 @@ xxl:
     log-retention-days: 30
     ip: 127.0.0.1
     port: 9990
+rocketmq:
+  name-server: 192.168.239.3:9876
+  producer:
+    group: paycore_producer
+    #消息发送的超时时间 默认3000ms
+    send-message-timeout: 3000
+    #消息达到4096字节的时候，消息就会被压缩。默认 4096
+    compress-message-body-threshold: 4096
+    #最大的消息限制，默认为128K
+    max-message-size: 4194304
+    #同步消息发送失败重试次数
+    retry-times-when-send-failed: 3
+    #在内部发送失败时是否重试其他代理，这个参数在有多个broker时才生效
+    retry-next-server: true
+    #异步消息发送失败重试的次数
+    retry-times-when-send-async-failed: 3
+  consumer:
+    group: paycore_consumer

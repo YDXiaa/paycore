@@ -19,4 +19,14 @@ public final class KeyCreator {
 
         return Joiner.on("_").join(key);
     }
+
+    /**
+     * 创建Key.
+     *
+     * @param key key[].
+     * @return key.
+     */
+    public static String createKey(final String... key) {
+        return createRedisKey(key);
+    }
 }

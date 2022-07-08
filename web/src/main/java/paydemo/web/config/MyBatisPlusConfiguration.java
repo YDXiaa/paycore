@@ -9,7 +9,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import paydemo.common.StringsExt;
 import paydemo.dao.mapper.TableNameHelper;
 
 import java.util.Map;
@@ -59,7 +58,10 @@ public class MyBatisPlusConfiguration {
                 return tableName;
             }
 
-            return StringsExt.joinStr("_", tableName, shardingDate);
+            // todo 方便测试.
+            return tableName;
+
+//            return StringsExt.joinStr("_", tableName, shardingDate);
         }));
 
         // 支付资金单表.
@@ -70,7 +72,9 @@ public class MyBatisPlusConfiguration {
                 return tableName;
             }
 
-            return StringsExt.joinStr("_", tableName, shardingDate);
+            // todo 方便测试.
+            return tableName;
+//            return StringsExt.joinStr("_", tableName, shardingDate);
         }));
 
         return handlerMap;

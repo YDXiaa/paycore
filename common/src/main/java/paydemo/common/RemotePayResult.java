@@ -19,7 +19,22 @@ public class RemotePayResult {
     /**
      * 支付状态.
      */
-    public PayStatusEnum payStatusEnum;
+    public String payStatus;
+
+    /**
+     * 请求渠道流水号.
+     */
+    private String outRequestSeqNo;
+
+    /**
+     * 渠道返回流水号.
+     */
+    private String outRespSeqNo;
+
+    /**
+     * 渠道详细编码.
+     */
+    private String channelDetailNo;
 
     /**
      * 结果码.

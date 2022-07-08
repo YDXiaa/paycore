@@ -34,4 +34,9 @@ public class PayFundRequestDTO implements Serializable {
      */
     private String payType;
 
+    /**
+     * 业务类型.
+     */
+    private String bizType;
+
 }

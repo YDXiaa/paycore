@@ -50,6 +50,18 @@ public class PayFundDO extends BaseDO {
     private Long origPayFundNo;
 
     /**
+     * 外部请求流水号.
+     */
+    @TableField("out_request_seq_no")
+    private String outRequestSeqNo;
+
+    /**
+     * 外部响应流水号.
+     */
+    @TableField("out_resp_seq_no")
+    private String outRespSeqNo;
+
+    /**
      * 支付类型.
      */
     @TableField("pay_type")
@@ -68,6 +80,12 @@ public class PayFundDO extends BaseDO {
     private Long refundAmt;
 
     /**
+     * 渠道手续费.
+     */
+    @TableField("channel_fee_amt")
+    private Long channelFeeAmt;
+
+    /**
      * 支付工具类型.
      */
     @TableField("pay_tool")
@@ -84,6 +102,12 @@ public class PayFundDO extends BaseDO {
      */
     @TableField("pay_seq")
     private Long paySeq;
+
+    /**
+     * 渠道详情编号.
+     */
+    @TableField("channel_detail_no")
+    private String channelDetailNo;
 
     /**
      * 支付状态.
