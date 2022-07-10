@@ -6,6 +6,7 @@ import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import paydemo.common.SysConstant;
 
 import java.util.Map;
 
@@ -18,10 +19,10 @@ import java.util.Map;
 @SuppressWarnings("all")
 public class DubboServiceRegistry {
 
-//    @Autowired
+    @Autowired
     private ApplicationConfig applicationConfig;
 
-//    @Autowired
+    @Autowired
     private RegistryConfig registryConfig;
 
     /**
@@ -48,11 +49,17 @@ public class DubboServiceRegistry {
      * @param <T>          Service.
      * @return T .
      */
-    private  <T> T createDubboService(Class<T> dubboService) {
+    private <T> T createDubboService(Class<T> dubboService) {
+
         ReferenceConfig<T> reference = new ReferenceConfig<>();
         reference.setApplication(applicationConfig);
         reference.setRegistry(registryConfig);
         reference.setInterface(dubboService);
+        reference.setRetries(0);
+        reference.setGroup(SysConstant.DUBBO_GROUP);
+        reference.setVersion(SysConstant.DUBBO_CONSUMER_VERSION);
+        reference.setCheck(false);
+        reference.setTimeout(SysConstant.DUBBO_CONSUMER_TIME_OUT);
         return reference.get();
     }
 

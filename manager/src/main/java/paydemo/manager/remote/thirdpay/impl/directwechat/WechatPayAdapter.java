@@ -3,40 +3,63 @@ package paydemo.manager.remote.thirdpay.impl.directwechat;
 import org.springframework.stereotype.Service;
 import paydemo.common.PayStatusEnum;
 import paydemo.common.RemotePayResult;
+import paydemo.common.exception.ResponseCodeEnum;
 import paydemo.manager.model.RemoteRequestModel;
 import paydemo.manager.remote.thirdpay.BaseRemoteServiceAdapter;
 import paydemo.manager.remote.thirdpay.DubboServiceRegistry;
-import paydemo.manager.remote.thirdpay.impl.mock.MockDirectWechatPayRequestDTO;
-import paydemo.manager.remote.thirdpay.impl.mock.RemotePayResponse;
-
-import java.util.UUID;
+import paydemo.paygateway.facade.model.GatewayPayResponse;
+import paydemo.paygateway.facade.model.GwResponse;
+import paydemo.paygateway.facade.model.pay.DirectWeChatPayRequestDTO;
+import paydemo.paygateway.facade.pay.DirectWeChatPayFacade;
 
 /**
  * @auther YDXiaa
+ * <p>
+ * 微信支付.
  */
 @Service
-public class WechatPayAdapter extends DubboServiceRegistry implements BaseRemoteServiceAdapter<MockDirectWechatPayRequestDTO, RemotePayResponse> {
-
+public class WechatPayAdapter extends DubboServiceRegistry implements BaseRemoteServiceAdapter<DirectWeChatPayRequestDTO,
+        GatewayPayResponse> {
 
     @Override
-    public MockDirectWechatPayRequestDTO createServiceReq(RemoteRequestModel model) {
-        MockDirectWechatPayRequestDTO mockDirectWechatPayRequestDTO = new MockDirectWechatPayRequestDTO();
-        mockDirectWechatPayRequestDTO.setPayAmt(model.getPayAmt());
-        return mockDirectWechatPayRequestDTO;
+    public DirectWeChatPayRequestDTO createServiceReq(RemoteRequestModel model) {
+
+        DirectWeChatPayRequestDTO requestDTO = new DirectWeChatPayRequestDTO();
+        requestDTO.setPayAmt(model.getPayAmt());
+        requestDTO.setChannelRequestSeqNo(model.getOutRequestSeqNo());
+        return requestDTO;
     }
 
     @Override
-    public RemotePayResponse doService(MockDirectWechatPayRequestDTO request) {
-//        return getDubboService(MockWechatPayServiceFacade.class).pay(request);
-        return new RemotePayResponse();
+    public GatewayPayResponse doService(DirectWeChatPayRequestDTO request) {
+
+        try {
+            GwResponse<GatewayPayResponse> gwResponse = getDubboService(DirectWeChatPayFacade.class).pay(request);
+            return gwResponse.getRespData();
+        } catch (Throwable throwable) {
+            GatewayPayResponse payResponse = new GatewayPayResponse();
+            if (invokeTimeOut(throwable)) {
+                payResponse.setPayStatus(PayStatusEnum.PAYING.getStatusCode());
+                payResponse.setResultCode(ResponseCodeEnum.REQUEST_CHANNEL_TIMEOUT.getRespCode());
+                payResponse.setResultDesc(ResponseCodeEnum.REQUEST_CHANNEL_TIMEOUT.getRespDesc());
+            } else {
+                payResponse.setPayStatus(PayStatusEnum.FAIL.getStatusCode());
+                payResponse.setResultCode(ResponseCodeEnum.REQUEST_CHANNEL_EXCEPTION.getRespCode());
+                payResponse.setResultDesc(ResponseCodeEnum.REQUEST_CHANNEL_EXCEPTION.getRespDesc());
+            }
+            return payResponse;
+        }
     }
 
     @Override
-    public RemotePayResult createServiceResp(RemoteRequestModel model, RemotePayResponse reult) {
+    public RemotePayResult createServiceResp(RemoteRequestModel model, GatewayPayResponse response) {
+
         RemotePayResult remotePayResult = new RemotePayResult();
-        remotePayResult.setPayStatus(PayStatusEnum.SUCCESS.getStatusCode());
-        remotePayResult.setRealRtn(true);
-        remotePayResult.setOutRespSeqNo(UUID.randomUUID().toString());
+
+        remotePayResult.setPayStatus(response.getPayStatus());
+        remotePayResult.setOutRespSeqNo(response.getChannelRespSeqNo());
+        remotePayResult.setPayUrl(response.getPayUrl());
+
         return remotePayResult;
     }
 }

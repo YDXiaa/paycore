@@ -3,9 +3,7 @@ package paydemo.biz.processor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import paydemo.biz.route.RouteBiz;
-import paydemo.common.PayStatusEnum;
-import paydemo.common.RemotePayResult;
-import paydemo.common.VerifyUtil;
+import paydemo.common.*;
 import paydemo.manager.db.PayFundManager;
 import paydemo.manager.helper.BeanCopier;
 import paydemo.manager.helper.PaySeqNoCreator;
@@ -13,6 +11,7 @@ import paydemo.manager.model.ChannelDetailInfoBO;
 import paydemo.manager.model.PayBaseInfoBO;
 import paydemo.manager.model.PayFundBO;
 import paydemo.manager.model.RemoteRequestModel;
+import paydemo.manager.mq.rocketmq.MessageProducer;
 import paydemo.manager.remote.thirdpay.ServiceExecutor;
 
 /**
@@ -34,6 +33,9 @@ public class ThirdPayProcessor implements PayProcessor {
 
     @Autowired
     private PayFundManager payFundManager;
+
+    @Autowired
+    private MessageProducer messageProducer;
 
 
     @Override
@@ -67,13 +69,34 @@ public class ThirdPayProcessor implements PayProcessor {
         // 设置支付渠道详情编码,后续成功率统计要使用.
         remotePayResult.setChannelDetailNo(channelDetailInfoBO.getChannelDetailNo());
 
+        // 内部补单.
+        if (PayStatusEnum.PAYING.getStatusCode().equals(remotePayResult.getPayStatus())) {
+            pushOrderStatusQuery(requestModel);
+        }
+
         // 更新支付结果.
         payFundManager.modifyPayFundStatus(payFundBO, PayStatusEnum.PAYING);
+
         return remotePayResult;
     }
 
     @Override
     public RemotePayResult revoke(PayFundBO payFundBO) {
         return null;
+    }
+
+
+    /**
+     * 渠道侧掉单,开启补单查询任务.
+     *
+     * @param requestModel 远程请求模型.
+     */
+    private void pushOrderStatusQuery(RemoteRequestModel requestModel) {
+
+        // 非查询任务才需要补单.
+
+        // 使用rocketMQ延迟消息补单.
+        messageProducer.sendDelayMessage(JsonUtil.toJsonStr(requestModel), MQTopicEnum.PAY_INNER_PUSH_STATUS.getTopicCode(),
+                MQDelayLevelEnum.LEVEL_10S);
     }
 }

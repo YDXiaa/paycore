@@ -64,9 +64,9 @@ public class ChannelDetailAccumulateHelper {
 
         ChannelDetailSummaryBO summaryBO = new ChannelDetailSummaryBO();
 
-        summaryBO.setSuccessCnt(Objects.isNull(successCnt) ? 0L : (Long) successCnt);
-        summaryBO.setFailCnt(Objects.isNull(failCnt) ? 0L : (Long) failCnt);
-        summaryBO.setPayingCnt(Objects.isNull(payingCnt) ? 0L : (Long) payingCnt);
+        summaryBO.setSuccessCnt(Objects.isNull(successCnt) ? 0L : Long.parseLong((String) successCnt));
+        summaryBO.setFailCnt(Objects.isNull(failCnt) ? 0L : Long.parseLong((String) failCnt));
+        summaryBO.setPayingCnt(Objects.isNull(payingCnt) ? 0L : Long.parseLong((String) payingCnt));
 
         return summaryBO;
     }

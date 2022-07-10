@@ -66,6 +66,12 @@
             <artifactId>dubbo</artifactId>
         </dependency>
 
+        <!--PayGateway-->
+        <dependency>
+            <groupId>paydemo</groupId>
+            <artifactId>paygateway-facade</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

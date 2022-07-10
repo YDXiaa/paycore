@@ -4,8 +4,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import paydemo.manager.mq.rocketmq.MessageProducer;
-import paydemo.manager.helper.ChannelDetailAccumulateHelper;
 import paydemo.common.*;
 import paydemo.common.exception.PayException;
 import paydemo.common.exception.ResponseCodeEnum;
@@ -15,10 +13,12 @@ import paydemo.dao.dbmodel.PayOrderDO;
 import paydemo.manager.db.PayJobDetailCreator;
 import paydemo.manager.db.PayOrderManager;
 import paydemo.manager.helper.BeanCopier;
+import paydemo.manager.helper.ChannelDetailAccumulateHelper;
 import paydemo.manager.helper.PaySeqNoCreator;
 import paydemo.manager.model.PayFundBO;
 import paydemo.manager.model.PayRequestBO;
 import paydemo.manager.model.PayResponseBO;
+import paydemo.manager.mq.rocketmq.MessageProducer;
 
 import java.util.Collections;
 import java.util.Date;
@@ -167,7 +167,7 @@ public class PayBiz extends AbstractPayBiz<PayRequestBO> {
             // 判断执行结果，如果支付状态为支付中、支付失败，需要冲正支付资金单.
             if (isExecRevoke(remotePayResult, i, totalPayFundCnt)) {
 
-                log.info("执行冲正逻辑,当前支付资金单序号:{},总支付资金单数量:{}",i,totalPayFundCnt);
+                log.info("执行冲正逻辑,当前支付资金单序号:{},总支付资金单数量:{}", i, totalPayFundCnt);
                 doPayRevokeProcess(i, request, payResponseBO);
                 break;
             }
@@ -288,8 +288,9 @@ public class PayBiz extends AbstractPayBiz<PayRequestBO> {
         }
 
         //  发送事件消息.
-        accumulateHelper.accumulateChannelDetail(payResponseBO.getPayStatus(),payResponseBO.getChannelDetailNo());
+        accumulateHelper.accumulateChannelDetail(payResponseBO.getPayStatus(), payResponseBO.getChannelDetailNo());
         // 发送kafka消息.
+        messageProducer.sendRealTimeMessage("{\"payStatus:\"SUCCESS\"}", MQTopicEnum.PAY_RESULT_TOPIC.getTopicCode());
 
     }
 }

@@ -37,16 +37,19 @@ spring:
 dubbo:
   # 扫描包地址
   scan:
-    base-packages: easypay.service
+    base-packages: paydemo.service
   application:
     name: paycore
   # 协议
   protocol:
     name: dubbo
-    port: -1  # 采用默认的自增端口
+    port: 20880
   # 注册地址
   registry:
-    address: nacos://localhost:55001/
+    address: nacos://192.168.239.3:8848/
+  consumer:
+    check: false
+
 
 
 # 服务版本号

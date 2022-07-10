@@ -47,6 +47,11 @@ public class RemotePayResult {
     private String resultDesc;
 
     /**
+     * 支付地址.
+     */
+    private String payUrl;
+
+    /**
      * 是否是真实响应.
      */
     private boolean isRealRtn;

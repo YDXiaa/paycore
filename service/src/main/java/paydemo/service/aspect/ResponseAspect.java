@@ -40,14 +40,12 @@ public class ResponseAspect {
             log.info("响应结果:{}", response);
 
         } catch (PayException payException) {
-
-            log.info("发生异常:", payException);
+            log.error("发生异常:", payException);
             return Response.createFailResponse(payException.getResponseCode().getRespCode(),
                     payException.getResponseCode().getRespCode());
 
         } catch (Throwable throwable) {
-
-            log.info("发生异常:", throwable);
+            log.error("发生异常:", throwable);
             return Response.createFailResponse(ResponseCodeEnum.SYS_ERROR.getRespCode(),
                     ResponseCodeEnum.SYS_ERROR.getRespDesc());
         }

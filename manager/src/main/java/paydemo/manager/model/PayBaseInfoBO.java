@@ -19,6 +19,9 @@ public class PayBaseInfoBO {
 
     /**
      * 支付类型.
+     *
+     * todo 如果是冲正场景,如果渠道提供了撤销接口,应该优先调用撤销接口;如果不存在，调用退款接口.
+     * todo 所以此处需要支持传入多张支付类型.
      */
     private String payType;
 

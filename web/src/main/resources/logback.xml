@@ -3,14 +3,14 @@
 
     <contextName>logback</contextName>
     <!--    启动指定JVM参数：-Dapp.log.home=D:/logs-->
-    <property name="log.path" value="${app.log.home:-.}"/>
+    <property name="log.path" value="./logs/app/paycore.log"/>
 
     <!-- ConsoleAppender：把日志输出到控制台 -->
-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %thread | %logger{36}:%L | %M | %msg%n</pattern>
-        </layout>
-
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <withJansi>true</withJansi>
         <encoder>
             <!--<pattern>%d %p (%file:%line\)- %m%n</pattern>-->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %thread | %logger{36}:%L | %M | %msg%n</pattern>
@@ -19,10 +19,16 @@
         </encoder>
     </appender>
     <!--log file 输出日志到文件-->
-    <appender name="DEFAULT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
         <file>${log.path}</file>
         <encoder>
             <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
+            <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${log.path}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
@@ -32,19 +38,11 @@
         </rollingPolicy>
     </appender>
 
-    <root level="DEBUG">
-        <appender-ref ref="stdout"/>
-        <appender-ref ref="DEFAULT_FILE"/>
-    </root>
-
-    <root level="INFO">
-        <appender-ref ref="stdout"/>
-        <appender-ref ref="DEFAULT_FILE"/>
-    </root>
-
-    <root level="ERROR">
-        <appender-ref ref="stdout"/>
-        <appender-ref ref="DEFAULT_FILE"/>
+    <root>
+        <!--    允许控制台输出-->
+        <appender-ref ref="CONSOLE"/>
+        <!--        允许文件输出-->
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>

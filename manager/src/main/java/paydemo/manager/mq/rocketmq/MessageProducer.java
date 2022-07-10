@@ -52,7 +52,7 @@ public class MessageProducer {
         rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                log.debug("发送消息成功,发送结果:{}", sendResult);
+                log.info("发送消息成功,发送结果:{}", sendResult);
                 // 只有SendOk才视为成功.
                 if (sendResult.getSendStatus() != SendStatus.SEND_OK) {
                     addPayJobDetailForRetry(message);

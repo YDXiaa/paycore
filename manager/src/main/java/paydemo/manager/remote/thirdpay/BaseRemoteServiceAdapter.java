@@ -1,14 +1,16 @@
 package paydemo.manager.remote.thirdpay;
 
+import org.apache.dubbo.rpc.RpcException;
 import paydemo.common.RemotePayResult;
 import paydemo.manager.model.RemoteRequestModel;
+import paydemo.paygateway.facade.model.GatewayPayResponse;
 
 /**
  * @auther YDXiaa
  * <p>
  * 远程服务适配器,适配所有服务接口.
  */
-public interface BaseRemoteServiceAdapter<T, R> {
+public interface BaseRemoteServiceAdapter<T, R extends GatewayPayResponse> {
 
     /**
      * 服务请求对象.
@@ -45,4 +47,21 @@ public interface BaseRemoteServiceAdapter<T, R> {
      * @return payResponse.
      */
     RemotePayResult createServiceResp(RemoteRequestModel model, R response);
+
+
+    /**
+     * 调用超时判断.
+     *
+     * @param throwable 异常信息.
+     * @return 是否调用超时.
+     */
+    default boolean invokeTimeOut(Throwable throwable) {
+
+        if (throwable instanceof RpcException) {
+            RpcException rpcException = (RpcException) throwable;
+            return rpcException.isTimeout();
+        }
+
+        return false;
+    }
 }

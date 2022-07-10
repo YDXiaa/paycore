@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import paydemo.common.PayStatusEnum;
 import paydemo.common.SysConstant;
 import paydemo.dao.dbmodel.PayFundDO;
-import paydemo.dao.dbmodel.PayOrderDO;
 import paydemo.dao.mapper.PayFundMapper;
 import paydemo.dao.mapper.TableNameHelper;
 import paydemo.manager.helper.BeanCopier;
