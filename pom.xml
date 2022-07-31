@@ -27,6 +27,7 @@
 
     <properties>
         <system.moudle.version>1.0-SNAPSHOT</system.moudle.version>
+        <paydemo.util.version>1.0-SNAPSHOT</paydemo.util.version>
         <spring.boot.version>2.3.3.RELEASE</spring.boot.version>
         <dubbo.version>2.7.6</dubbo.version>
         <dubbo.nacos.version>2.7.6</dubbo.nacos.version>
@@ -80,6 +81,13 @@
                 <groupId>paydemo</groupId>
                 <artifactId>web</artifactId>
                 <version>${system.moudle.version}</version>
+            </dependency>
+
+            <!-- Util-->
+            <dependency>
+                <groupId>paydemo</groupId>
+                <artifactId>util</artifactId>
+                <version>${paydemo.util.version}</version>
             </dependency>
 
             <!-- Spring boot -->

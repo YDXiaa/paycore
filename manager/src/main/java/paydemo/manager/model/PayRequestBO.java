@@ -3,6 +3,7 @@ package paydemo.manager.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import paydemo.common.RemotePayResult;
 
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,22 @@ public class PayRequestBO {
      */
     private String payStatus;
 
+    // ------------付款人信息--------------
+    /**
+     * 用户编号.
+     */
+    private String payerUserNo;
+
+    /**
+     * 平台登录号.
+     */
+    private String payerLoginNo;
+
+    /**
+     * 客户号.
+     */
+    private String payerCustomerNo;
+
     /**
      * 支付创建时间.
      */
@@ -70,5 +87,15 @@ public class PayRequestBO {
      * 资金单.
      */
     public List<PayFundBO> payFundBOList;
+
+    /**
+     * 最后一笔支付结果.
+     */
+    private RemotePayResult lastRemotePayResult;
+
+    /**
+     * 继续完成订单,不一定是成功订单.
+     */
+    private boolean continueCompletePayOrder;
 
 }

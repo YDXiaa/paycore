@@ -2,7 +2,8 @@ package paydemo.facade;
 
 import paydemo.facade.model.PayResponseDTO;
 import paydemo.facade.model.PayRequestDTO;
-import paydemo.facade.model.Response;
+import paydemo.util.Response;
+
 
 /**
  * @auther YDXiaa

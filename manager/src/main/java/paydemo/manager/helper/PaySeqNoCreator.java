@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import paydemo.common.*;
 import paydemo.manager.redis.RedisKit;
+import paydemo.util.StringsExt;
 
 import java.util.Date;
 

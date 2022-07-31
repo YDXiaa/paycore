@@ -1,10 +1,10 @@
 package paydemo.biz.route.filter;
 
 import org.springframework.stereotype.Component;
-import paydemo.common.FlagsEnum;
 import paydemo.common.SortPriorityEnum;
 import paydemo.manager.model.ChannelDetailInfoBO;
 import paydemo.manager.model.PayBaseInfoBO;
+import paydemo.util.FlagsEnum;
 
 /**
  * @auther YDXiaa

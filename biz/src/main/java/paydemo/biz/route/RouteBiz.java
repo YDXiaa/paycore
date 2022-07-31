@@ -1,6 +1,6 @@
 package paydemo.biz.route;
 
-import com.google.common.base.Throwables;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +29,10 @@ public class RouteBiz {
     public ChannelDetailInfoBO route(PayBaseInfoBO payBaseInfoBO) {
         try {
             return routeChain.getRouteChannel(payBaseInfoBO);
-        }catch (Throwable throwable){
-            log.error("异常信息:{}", Throwables.getStackTraceAsString(throwable));
+        } catch (Throwable throwable) {
+            log.error("路由请求异常,异常信息:{}", ExceptionUtil.stacktraceToString(throwable));
+            return null;
         }
-        return null;
     }
 
 }

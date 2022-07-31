@@ -28,10 +28,10 @@ public class XxlJobConfiguration {
         xxlJobSpringExecutor.setAppname(xxlJobProperties.getAppname());
         // 节点地址.
         xxlJobSpringExecutor.setAddress(xxlJobProperties.getAddress());
-        // 节点ip.
-        xxlJobSpringExecutor.setIp(xxlJobProperties.getIp());
-        // 节点port.
-        xxlJobSpringExecutor.setPort(xxlJobProperties.getPort());
+//        // 节点ip.
+//        xxlJobSpringExecutor.setIp(xxlJobProperties.getIp());
+//        // 节点port.
+//        xxlJobSpringExecutor.setPort(xxlJobProperties.getPort());
         // admin adressToken.
         xxlJobSpringExecutor.setAccessToken(xxlJobProperties.getAccessToken());
         // log cofnig.

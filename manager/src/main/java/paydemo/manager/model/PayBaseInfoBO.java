@@ -1,8 +1,11 @@
 package paydemo.manager.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * @auther YDXiaa
@@ -10,6 +13,9 @@ import java.util.Date;
  * 支付基础信息信息.
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PayBaseInfoBO {
 
     /**
@@ -18,12 +24,15 @@ public class PayBaseInfoBO {
     private long payAmt;
 
     /**
-     * 支付类型.
+     * 支付类型(优先选择支付类型.).
      *
-     * todo 如果是冲正场景,如果渠道提供了撤销接口,应该优先调用撤销接口;如果不存在，调用退款接口.
-     * todo 所以此处需要支持传入多张支付类型.
      */
     private String payType;
+
+    /**
+     * 支付类型集合.
+     */
+    private List<String> availablePayTypes;
 
     /**
      * 支付工具.

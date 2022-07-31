@@ -35,7 +35,7 @@ public enum BizTypeEnum {
     /**
      * 默认无业务类型填充值.
      */
-    DEFAULT("NO_BIZ_TYPE","无业务类型");
+    DEFAULT("DEFAULT","无业务类型");
 
     /**
      * 业务类型编码.

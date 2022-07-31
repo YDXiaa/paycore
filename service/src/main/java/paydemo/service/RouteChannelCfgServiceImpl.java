@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import paydemo.facade.RouteChannelCfgFacade;
 import paydemo.facade.model.ChannelCfgRequestDTO;
 import paydemo.facade.model.ChannelDetailCfgRequestDTO;
-import paydemo.facade.model.Response;
+import paydemo.util.Response;
 
 /**
  * @auther YDXiaa

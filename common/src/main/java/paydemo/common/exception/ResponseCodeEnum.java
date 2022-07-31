@@ -36,6 +36,11 @@ public enum ResponseCodeEnum {
     ORDER_SYS_EXISTS("ORDER_SYS_EXISTS", "订单已存在,请仔细核对订单信息"),
 
     /**
+     * 订单不存在.
+     */
+    ORDER_NOT_EXISTS("ORDER_NOT_EXISTS","订单已存在,请仔细核对订单信息"),
+
+    /**
      * 非预计订单状态.
      */
     UNEXPECTED_PAY_STATUS("UNEXPECTED_PAY_STATUS", "非预计订单状态"),
@@ -63,7 +68,17 @@ public enum ResponseCodeEnum {
     /**
      * 手续费计算模式错误.
      */
-    FEE_CAL_MODE_ERROR("FEE_CAL_MODE_ERROR","手续费计算模式错误"),
+    FEE_CAL_MODE_ERROR("FEE_CAL_MODE_ERROR", "手续费计算模式错误"),
+
+    /**
+     * 支付状态不支持此操作.
+     */
+    PAY_STATUS_NOT_SUPPORT("PAY_STATUS_NOT_SUPPORT", "支付状态不支持此操作"),
+
+    /**
+     * 退款金额超出原单金额.
+     */
+    REFUND_AMT_OVERMUCH("REFUND_AMT_OVERMUCH", "退款金额超出可退款金额"),
 
     ;
 

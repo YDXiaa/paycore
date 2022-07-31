@@ -30,7 +30,12 @@ public enum SortPriorityEnum {
     /**
      * 成功率优先级.
      */
-    SUCCESS_RATE(500, "通道成功率")
+    SUCCESS_RATE(500, "通道成功率"),
+
+    /**
+     * 支付类型.
+     */
+    PAY_TYPE(200,"支付类型")
 
     ;
 

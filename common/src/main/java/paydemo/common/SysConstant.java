@@ -42,5 +42,4 @@ public final class SysConstant {
      */
     public static final Long JOB_DEFAULT_EXECUTE_INTERVAL = 60L;
 
-
 }

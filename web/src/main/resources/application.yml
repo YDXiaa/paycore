@@ -82,7 +82,7 @@ mybatis-plus:
 xxl:
   job:
     access-token: default_token
-    admin-addresses: http://127.0.0.1:8080/xxl-job-admin
+    admin-addresses: http://127.0.0.1:8089/xxl-job-admin
     appname: paycore
     log-path: ~/logs/xxl-job/jobhandler/
     log-retention-days: 30

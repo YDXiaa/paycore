@@ -1,19 +1,19 @@
 package paydemo.manager.db;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import paydemo.common.SwitchStatusEnum;
 import paydemo.dao.dbmodel.ChannelDetailFeeDO;
 import paydemo.dao.dbmodel.ChannelDetailInfoDO;
 import paydemo.dao.dbmodel.ChannelInfoDO;
 import paydemo.dao.mapper.ChannelDetailFeeMapper;
 import paydemo.dao.mapper.ChannelDetailInfoMapper;
 import paydemo.dao.mapper.ChannelInfoMapper;
-import paydemo.manager.helper.BeanCopier;
 import paydemo.manager.model.ChannelDetailInfoBO;
+import paydemo.util.SwitchStatusEnum;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,16 +55,15 @@ public class ChannelDetailInfoManager {
      *
      * @param payTool    支付工具.
      * @param paySubTool 支付工具子类型.
-     * @param payType    支付类型.
      * @param bizType    业务类型.
      * @return 渠道列表.
      */
-    public List<ChannelDetailInfoBO> queryChannelDetailInfo(String payTool, String paySubTool, String payType, String bizType) {
+    public List<ChannelDetailInfoBO> queryChannelDetailInfo(String payTool, String paySubTool, List<String> selectPayTypes, String bizType) {
 
         LambdaQueryWrapper<ChannelDetailInfoDO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(ChannelDetailInfoDO::getPayTool, payTool)
                 .eq(ChannelDetailInfoDO::getPaySubTool, paySubTool)
-                .eq(ChannelDetailInfoDO::getPayType,payType)
+                .in(ChannelDetailInfoDO::getPayType, selectPayTypes)
                 .eq(!Strings.isNullOrEmpty(bizType), ChannelDetailInfoDO::getBizType, bizType)
                 .eq(ChannelDetailInfoDO::getChannelDetailStatus, SwitchStatusEnum.OPEN.getSwitchStatusCode());
 
@@ -79,13 +78,9 @@ public class ChannelDetailInfoManager {
 
             ChannelDetailInfoBO channelDetailInfoBO = new ChannelDetailInfoBO();
 
-//            BeanCopier.objCopy(channelInfoDO, channelDetailInfoBO);
-//            BeanCopier.objCopy(channelDetailInfoDO, channelDetailInfoBO);
-//            BeanCopier.objCopy(channelDetailFeeDO, channelDetailInfoBO);
-
-            BeanCopier.getInstance().copy(channelInfoDO, channelDetailInfoBO)
-                    .copy(channelDetailInfoDO, channelDetailInfoBO)
-                    .copy(channelDetailFeeDO, channelDetailInfoBO);
+            BeanUtil.copyProperties(channelInfoDO, channelDetailInfoBO);
+            BeanUtil.copyProperties(channelDetailInfoDO, channelDetailInfoBO);
+            BeanUtil.copyProperties(channelDetailFeeDO, channelDetailInfoBO);
 
             return channelDetailInfoBO;
         }).collect(Collectors.toList());

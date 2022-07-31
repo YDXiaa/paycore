@@ -1,9 +1,9 @@
 package paydemo.facade.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,35 +11,25 @@ import java.util.List;
  * <p>
  * 支付请求对象.
  */
-@Data
-public class PayRequestDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 外部系统请求业务号.
-     */
-    private String requestBizNo;
+@Getter
+@Setter
+@ToString(callSuper = true)
+public class PayRequestDTO  extends PayBaseDTO {
 
     /**
-     * 请求日期.
+     * 用户编号.
      */
-    private Date requestDate;
+    private String payerUserNo;
 
     /**
-     * 订单来源业务线.
+     * 平台登录号.
      */
-    private String bizLine;
+    private String payerLoginNo;
 
     /**
-     * 支付金额.
+     * 客户号.
      */
-    private long payAmt;
-
-    /**
-     * 支付类型.
-     */
-    private String payType;
+    private String payerCustomerNo;
 
     /**
      * 订单备注.
@@ -50,6 +40,5 @@ public class PayRequestDTO implements Serializable {
      * 资金系统集合.
      */
     private List<PayFundRequestDTO> payFundRequestDTOList;
-
 
 }

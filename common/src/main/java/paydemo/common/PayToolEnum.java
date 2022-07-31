@@ -36,4 +36,12 @@ public enum PayToolEnum {
      * 支付工具描述.
      */
     private final String payToolDesc;
+
+    public static boolean isBalance(String payTool) {
+        return BALANCE.getPayToolCode().equals(payTool);
+    }
+
+    public static boolean isThirdPay(String payTool) {
+        return THIRD_PAY.getPayToolCode().equals(payTool);
+    }
 }

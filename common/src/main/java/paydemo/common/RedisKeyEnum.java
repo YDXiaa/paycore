@@ -18,6 +18,11 @@ public enum RedisKeyEnum {
     PAYCORE_PAY("PAYCORE_PAY", "支付业务"),
 
     /**
+     * 退款业务key.
+     */
+    PAYCORE_REFUND("PAYCORE_REFUND", "退款业务"),
+
+    /**
      * 支付单号key.
      */
     PAYCORE_PAYNO("PAYCORE_PAY_NO", "支付单号生成"),

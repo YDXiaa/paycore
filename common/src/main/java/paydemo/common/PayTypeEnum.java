@@ -21,6 +21,37 @@ public enum PayTypeEnum {
      * 退款.
      */
     REFUND("REFUND", "退款", "02"),
+
+    /**
+     * 撤销.
+     */
+    CANCEL("CANCEL", "撤销", "03"),
+
+    /**
+     * 代扣.
+     */
+    WITHHOLD("WITHHOLD", "代扣", "04"),
+
+    /**
+     * 冲正.
+     */
+    REVOKE("REVOKE", "冲正", "05"),
+
+    /**
+     * 代发.
+     */
+    ISSUE("ISSUE", "代发", "06"),
+
+    /**
+     * 认证.
+     */
+    AUTH("AUTH", "认证", "07"),
+
+    /**
+     * 转账.
+     */
+    TRANSFER("TRANSFER","转账","08")
+
     ;
 
     /**

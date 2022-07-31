@@ -60,6 +60,25 @@ public class PayOrderDO extends BaseDO {
     @TableField("pay_type")
     private String payType;
 
+    // ------------付款人信息--------------
+    /**
+     * 用户编号.
+     */
+    @TableField("payer_user_no")
+    private String payerUserNo;
+
+    /**
+     * 平台登录号.
+     */
+    @TableField("payer_login_no")
+    private String payerLoginNo;
+
+    /**
+     * 客户号.
+     */
+    @TableField("payer_customer_no")
+    private String payerCustomerNo;
+
     /**
      * 支付状态.
      */

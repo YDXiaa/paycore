@@ -26,6 +26,12 @@
             <groupId>paydemo</groupId>
             <artifactId>biz</artifactId>
         </dependency>
+
+        <!-- Util-->
+        <dependency>
+            <groupId>paydemo</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
         <!-- Spring Boot dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

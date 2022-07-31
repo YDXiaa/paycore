@@ -20,10 +20,27 @@ public interface PayProcessor {
     RemotePayResult pay(PayFundBO payFundBO);
 
     /**
+     * 支付查询.
+     *
+     * @param payFundBO 支付资金单.
+     * @return 资金系统处理结果.
+     */
+    RemotePayResult payQuery(PayFundBO payFundBO);
+
+    /**
      * 冲正.
      *
      * @param payFundBO 支付资金单.
      * @return 资金系统处理结果.
      */
     RemotePayResult revoke(PayFundBO payFundBO);
+
+
+    /**
+     * 冲正.
+     *
+     * @param payFundBO 支付资金单.
+     * @return 资金系统处理结果.
+     */
+    RemotePayResult revokeQuery(PayFundBO payFundBO);
 }

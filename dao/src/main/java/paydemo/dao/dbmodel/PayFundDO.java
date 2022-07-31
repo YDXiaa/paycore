@@ -47,7 +47,7 @@ public class PayFundDO extends BaseDO {
      * 原支付资金单号.
      */
     @TableField("orig_pay_fund_no")
-    private Long origPayFundNo;
+    private String origPayFundNo;
 
     /**
      * 外部请求流水号.
@@ -101,13 +101,55 @@ public class PayFundDO extends BaseDO {
      * 支付单序号.
      */
     @TableField("pay_seq")
-    private Long paySeq;
+    private long paySeq;
+
+    /**
+     * 外部授权userId.
+     */
+    @TableField("ext_auth_user_id")
+    private String extAuthUserId;
+
+    /**
+     * 代金券号.
+     */
+    @TableField("coupon_no")
+    private String couponNo;
+
+    /**
+     * 客户关联账户编号.
+     */
+    @TableField("payer_customer_acc_no")
+    private String payerCustomerAccNo;
+
+    /**
+     * 账户分类.
+     */
+    @TableField("payer_acc_classify")
+    private String payerAccClassify;
+
+    /**
+     * 客户类型.
+     */
+    @TableField("payer_acc_type")
+    private String payerAccType;
+
+    /**
+     * 账户号.
+     */
+    @TableField("payer_acc_no")
+    private String payerAccNo;
 
     /**
      * 渠道详情编号.
      */
     @TableField("channel_detail_no")
     private String channelDetailNo;
+
+    /**
+     * 渠道支付类型.例如冲正支付类型对接渠道的有可能是撤销或者退款接口.
+     */
+    @TableField("channel_pay_type")
+    private String channelPayType;
 
     /**
      * 支付状态.

@@ -56,7 +56,7 @@ public class PayJobDetailManager {
         queryWrapper.eq(PayJobDetailDO::getShardingMark, shardingMark)
                 .lt(PayJobDetailDO::getNextExecTime, new Date()) // 小于当前时间.
                 .orderByAsc(PayJobDetailDO::getNextExecTime)
-                .last("limit " + readCount);
+                .last("limit  " + readCount);
 
         return payJobDetailMapper.selectList(queryWrapper);
     }

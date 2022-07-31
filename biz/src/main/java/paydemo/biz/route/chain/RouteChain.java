@@ -1,10 +1,13 @@
 package paydemo.biz.route.chain;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import paydemo.biz.route.filter.*;
+import paydemo.common.BizTypeEnum;
 import paydemo.common.RouteFilterTypeEnum;
 import paydemo.common.exception.PayException;
 import paydemo.common.exception.ResponseCodeEnum;
@@ -68,6 +71,12 @@ public class RouteChain {
     @Autowired
     private ChannelDiscountRouteFilter channelDiscountRouteFilter;
 
+    /**
+     * 支付类型多选路由过滤器.
+     */
+    @Autowired
+    private PayTypeRouteFilter payTypeRouteFilter;
+
 
     @Autowired
     private ChannelDetailInfoManager channelDetailInfoManager;
@@ -89,7 +98,8 @@ public class RouteChain {
         List<RouteFilter> sortRouteFilterList = Lists.newArrayList(successRateRouteFilter,
                 channelFeeRouteFilter,
                 channelForceWeightRouteFilter,
-                channelDiscountRouteFilter);
+                channelDiscountRouteFilter,
+                payTypeRouteFilter);
 
         FILTER_CONTAINER.put(RouteFilterTypeEnum.PLAIN, commonRouteFilterList);
         FILTER_CONTAINER.put(RouteFilterTypeEnum.SORT, sortRouteFilterList);
@@ -104,8 +114,17 @@ public class RouteChain {
      */
     public ChannelDetailInfoBO getRouteChannel(PayBaseInfoBO payBaseInfoBO) {
 
+        //  如果AvailablePayTypes为空，使用payTypes.
+        if (CollectionUtil.isEmpty(payBaseInfoBO.getAvailablePayTypes())) {
+            payBaseInfoBO.setAvailablePayTypes(Lists.newArrayList(payBaseInfoBO.getPayType()));
+        }
+
+        if(StrUtil.isBlank(payBaseInfoBO.getBizType())){
+            payBaseInfoBO.setBizType(BizTypeEnum.DEFAULT.getBizTypeCode());
+        }
+
         List<ChannelDetailInfoBO> channelDetailInfoBOList = channelDetailInfoManager.queryChannelDetailInfo(payBaseInfoBO.getPayTool(),
-                payBaseInfoBO.getPaySubTool(), payBaseInfoBO.getPayType(), payBaseInfoBO.getBizType());
+                payBaseInfoBO.getPaySubTool(), payBaseInfoBO.getAvailablePayTypes(), payBaseInfoBO.getBizType());
 
         // 1、普通过滤器
         List<ChannelDetailInfoBO> commonFilteredList = channelDetailInfoBOList.stream().filter(channelDetailInfoBO -> {

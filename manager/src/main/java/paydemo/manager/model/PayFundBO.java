@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import paydemo.common.PaySubToolEnum;
+import paydemo.util.PayStatusEnum;
 
 import java.util.Date;
 
@@ -36,6 +37,11 @@ public class PayFundBO implements Comparable<PayFundBO> {
      * 业务类型.
      */
     private String bizType;
+
+    /**
+     * 原支付资金单号.
+     */
+    private String origPayFundNo;
 
     /**
      * 支付金额.
@@ -73,9 +79,49 @@ public class PayFundBO implements Comparable<PayFundBO> {
     private String paySubTool;
 
     /**
+     * 外部授权userId.
+     */
+    private String extAuthUserId;
+
+    /**
+     * 代金券号.
+     */
+    private String couponNo;
+
+    /**
+     * 客户关联账户编号.
+     */
+    private String payerCustomerAccNo;
+
+    /**
+     * 账户分类.
+     */
+    private String payerAccClassify;
+
+    /**
+     * 客户类型.
+     */
+    private String payerAccType;
+
+    /**
+     * 账户号.
+     */
+    private String payerAccNo;
+
+    /**
+     * 代扣场景下，代扣协议号.
+     */
+    private String agreementNo;
+
+    /**
      * 支付状态.
      */
     private String payStatus;
+
+    /**
+     * 原状态.
+     */
+    private PayStatusEnum origPayStatus;
 
     /**
      * 渠道编号.

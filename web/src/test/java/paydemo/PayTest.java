@@ -3,6 +3,7 @@ import com.google.common.collect.Lists;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.locks.LockSupport;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class PayTest extends BaseSpringBootSupport{
         payRequestDTO.setPayAmt(300L);
         payRequestDTO.setPayType(PayTypeEnum.PAY.getPayTypeCode());
         payRequestDTO.setOrderRemark("农夫山泉矿泉水");
+        payRequestDTO.setPayerLoginNo("wx_xxxx");
+        payRequestDTO.setPayerUserNo("3000000000");
+        payRequestDTO.setPayerCustomerNo("6000000000000");
 
 
         List<PayFundRequestDTO> payFundRequestDTOList = Lists.newArrayList();
@@ -41,6 +45,7 @@ public class PayTest extends BaseSpringBootSupport{
         alipayFundRequestDTO.setPaySubTool(PaySubToolEnum.WECHATPAY.getPaySubToolCode());
         alipayFundRequestDTO.setPayType(PayTypeEnum.PAY.getPayTypeCode());
         alipayFundRequestDTO.setBizType(BizTypeEnum.PC_ONLINE.getBizTypeCode());
+        alipayFundRequestDTO.setExtAuthUserId("wx_xxxxxxxxx");
 
 
         PayFundRequestDTO marktingFundRequestDTO = new PayFundRequestDTO();
@@ -48,6 +53,7 @@ public class PayTest extends BaseSpringBootSupport{
         marktingFundRequestDTO.setPayTool(PayToolEnum.MARKETING.getPayToolCode());
         marktingFundRequestDTO.setPaySubTool(PaySubToolEnum.POINTS.getPaySubToolCode());
         marktingFundRequestDTO.setPayType(PayTypeEnum.PAY.getPayTypeCode());
+        marktingFundRequestDTO.setCouponNo("C99999999999");
 
         payFundRequestDTOList.add(alipayFundRequestDTO);
         payFundRequestDTOList.add(marktingFundRequestDTO);
@@ -55,5 +61,7 @@ public class PayTest extends BaseSpringBootSupport{
         payRequestDTO.setPayFundRequestDTOList(payFundRequestDTOList);
 
         payServiceImpl.pay(payRequestDTO);
+
+//        LockSupport.park();
     }
 }

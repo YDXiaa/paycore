@@ -1,5 +1,6 @@
 package paydemo.service;
 
+import cn.hutool.core.bean.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import paydemo.biz.PayBiz;
@@ -7,12 +8,11 @@ import paydemo.common.RedisKeyEnum;
 import paydemo.facade.PayServiceFacade;
 import paydemo.facade.model.PayResponseDTO;
 import paydemo.facade.model.PayRequestDTO;
-import paydemo.facade.model.Response;
-import paydemo.manager.helper.BeanCopier;
 import paydemo.manager.model.PayFundBO;
 import paydemo.manager.model.PayRequestBO;
 import paydemo.manager.model.PayResponseBO;
 import paydemo.service.aspect.RequiredLockControl;
+import paydemo.util.Response;
 
 /**
  * @auther YDXiaa
@@ -35,13 +35,12 @@ public class PayServiceImpl implements PayServiceFacade {
     @RequiredLockControl(keyPrefix = RedisKeyEnum.PAYCORE_PAY, fields = {"requestBizNo"})
     public Response<PayResponseDTO> pay(PayRequestDTO payRequestDTO) {
 
-        // todo 抽象对象转换处理器工厂处理.
-        PayRequestBO payRequestBO = BeanCopier.objCopy(payRequestDTO, PayRequestBO.class);
-        payRequestBO.setPayFundBOList(BeanCopier.objListCopy(payRequestDTO.getPayFundRequestDTOList(), PayFundBO.class));
+        PayRequestBO payRequestBO = BeanUtil.copyProperties(payRequestDTO, PayRequestBO.class);
+        payRequestBO.setPayFundBOList(BeanUtil.copyToList(payRequestDTO.getPayFundRequestDTOList(), PayFundBO.class));
 
-        PayResponseBO payResponseBO = payBiz.pay(payRequestBO);
+        PayResponseBO payResponseBO = payBiz.execute(payRequestBO);
 
-        PayResponseDTO payResponseDTO = BeanCopier.objCopy(payResponseBO, PayResponseDTO.class);
+        PayResponseDTO payResponseDTO = BeanUtil.copyProperties(payResponseBO, PayResponseDTO.class);
 
         return Response.createSuccessResponse(payResponseDTO);
     }

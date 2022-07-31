@@ -16,7 +16,7 @@ public abstract class AbstractPayBiz<R extends PayRequestBO> {
      * @param request 请求对象.
      * @return 响应对象.
      */
-    public PayResponseBO pay(R request) {
+    public PayResponseBO execute(R request) {
 
         PayResponseBO payResponseBO = new PayResponseBO();
 

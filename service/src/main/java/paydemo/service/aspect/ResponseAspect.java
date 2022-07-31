@@ -9,7 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import paydemo.common.exception.PayException;
 import paydemo.common.exception.ResponseCodeEnum;
-import paydemo.facade.model.Response;
+import paydemo.util.Response;
 
 /**
  * @auther YDXiaa

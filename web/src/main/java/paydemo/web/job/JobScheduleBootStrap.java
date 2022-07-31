@@ -1,12 +1,15 @@
 package paydemo.web.job;
 
 import com.xxl.job.core.context.XxlJobHelper;
+import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import paydemo.common.DateUtil;
-import paydemo.common.ExecStatusEnum;
-import paydemo.common.VerifyUtil;
+import org.springframework.stereotype.Component;
+import paydemo.biz.JobBiz;
+import paydemo.common.*;
+import paydemo.dao.dbmodel.PayErrorDO;
 import paydemo.dao.dbmodel.PayJobDetailDO;
+import paydemo.manager.db.PayErrorManager;
 import paydemo.manager.db.PayJobDetailManager;
 
 import java.util.Date;
@@ -15,10 +18,11 @@ import java.util.List;
 /**
  * @auther YDXiaa
  * <p>
- * 统一任务调度模板类.
+ * 统一任务调度类.
  */
 @Slf4j
-public abstract class BaseJobSchedule {
+@Component
+public class JobScheduleBootStrap {
 
     // 读取数据库数量.
     static final int defaultReadCnt = 100;
@@ -26,11 +30,18 @@ public abstract class BaseJobSchedule {
     @Autowired
     private PayJobDetailManager payJobDetailManager;
 
+    @Autowired
+    private PayErrorManager payErrorManager;
+
+    @Autowired
+    private JobBiz jobBiz;
+
     /**
      * 统一调度核心逻辑入口.
      * <p>
      * todo 异常 作业单状态无法更新,无法继续下去,需要由手动推进入口.
      */
+    @XxlJob(value = "payJobDetailJob")
     public void scheduleForSharding() {
 
         // xxl-job获取 shardIndex.
@@ -82,6 +93,10 @@ public abstract class BaseJobSchedule {
     private void schedulePreProcess2Run(PayJobDetailDO payJobDetailDO) {
         payJobDetailDO.setExecStatus(ExecStatusEnum.WORKING.getExecStatusCode());
         payJobDetailDO.setExecTimes(payJobDetailDO.getExecTimes() + 1);
+
+        int modifyCnt = payJobDetailManager.modifyPayJobDetailStatus(payJobDetailDO);
+
+        VerifyUtil.verifySqlResult(modifyCnt);
     }
 
 
@@ -92,7 +107,8 @@ public abstract class BaseJobSchedule {
      */
     private void scheduleExecuteResult2Fail(PayJobDetailDO payJobDetailDO) {
         payJobDetailDO.setExecStatus(ExecStatusEnum.FAIL.getExecStatusCode());
-        // todo 差错处理逻辑.
+        //  落差错处理.
+        addPayError(payJobDetailDO);
     }
 
     /**
@@ -102,7 +118,7 @@ public abstract class BaseJobSchedule {
      */
     private void scheduleExecuteResult2Retry(PayJobDetailDO payJobDetailDO) {
         payJobDetailDO.setExecStatus(ExecStatusEnum.READY.getExecStatusCode());
-        payJobDetailDO.setNextExecTime(DateUtil.after(new Date(),payJobDetailDO.getExecInterval()));
+        payJobDetailDO.setNextExecTime(DateUtil.after(new Date(), payJobDetailDO.getExecInterval()));
     }
 
     /**
@@ -114,13 +130,33 @@ public abstract class BaseJobSchedule {
         payJobDetailDO.setExecStatus(ExecStatusEnum.SUCCESS.getExecStatusCode());
     }
 
+
+    /**
+     * 落差错单.
+     *
+     * @param payJobDetailDO 作业单.
+     */
+    private void addPayError(PayJobDetailDO payJobDetailDO) {
+
+        PayErrorDO payErrorDO = new PayErrorDO();
+
+        payErrorDO.setPayNo(payJobDetailDO.getJobDetailId());
+        payErrorDO.setErrorType(payJobDetailDO.getJobType());
+        payErrorDO.setErrorProcessType(ErrorProcessTypeEnum.MANUAL.getErrorProcessTypeCode());
+        payErrorDO.setErrorProcessStatus(ErrorProcessStatusEnum.WAIT_PROCESS.getErrorProcessStatusCode());
+
+        payErrorManager.addPayError(payErrorDO);
+    }
+
     /**
      * 核心执行方法.
      *
      * @param payJobDetailDO 作业任务单.
      * @return 处理结果.
      */
-    protected abstract boolean process(PayJobDetailDO payJobDetailDO);
+    protected boolean process(PayJobDetailDO payJobDetailDO){
+        return jobBiz.process(payJobDetailDO);
+    }
 
     /**
      * 批次读取数量，子类实现.

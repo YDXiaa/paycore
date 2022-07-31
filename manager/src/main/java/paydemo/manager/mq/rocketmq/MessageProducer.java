@@ -1,5 +1,6 @@
 package paydemo.manager.mq.rocketmq;
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import com.google.common.eventbus.AsyncEventBus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendCallback;
@@ -10,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+import paydemo.common.ExecStatusEnum;
 import paydemo.common.JobTypeEnum;
 import paydemo.common.MQDelayLevelEnum;
 import paydemo.dao.dbmodel.PayJobDetailDO;
-import paydemo.manager.db.PayJobDetailCreator;
 import paydemo.manager.db.PayJobDetailManager;
 import paydemo.manager.mq.local.event.BaseLocalEvent;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -76,10 +78,19 @@ public class MessageProducer {
      */
     public void sendDelayMessage(String message, String topic, MQDelayLevelEnum delayLevel) {
 
+        // 实时消息.
+        if (MQDelayLevelEnum.LEVEL_0S == delayLevel) {
+            sendRealTimeMessage(message, topic);
+            return;
+        }
+
+
         Message<String> stringMessage = MessageBuilder.withPayload(message).build();
 
         // 只有同步发送才能指定延迟级别.
         try {
+
+            log.info("发送延迟消息:{},topic:{}",message,topic);
             SendResult sendResult = rocketMQTemplate.syncSend(topic, stringMessage, 3000L, delayLevel.getDelayLevelSeq());
 
             // 只有SendOk才视为成功.
@@ -87,7 +98,7 @@ public class MessageProducer {
                 addPayJobDetailForRetry(message);
             }
         } catch (Throwable throwable) {
-            log.error("发送延迟消息失败,消息体:{},异常信息:{}", message, throwable);
+            log.error("发送延迟消息失败,消息体:{},异常信息:{}", message, ExceptionUtil.stacktraceToString(throwable));
             addPayJobDetailForRetry(message);
         }
     }
@@ -98,11 +109,18 @@ public class MessageProducer {
      * @param message message.
      */
     private void addPayJobDetailForRetry(String message) {
-        PayJobDetailDO payJobDetailDO = PayJobDetailCreator.createPayJobDetailDO(UUID.randomUUID().toString(),
-                message,
-                JobTypeEnum.MQ_RETRY_SEND.getJobTypeCode(),
-                30L,
-                5L);
-        payJobDetailManager.addJobDetail(payJobDetailDO);
+
+//        PayJobDetailDO payJobDetailDO = PayJobDetailDO.builder().jobDetailId(UUID.randomUUID().toString())
+//                .jobDetailDesc(message)
+//                .jobType(JobTypeEnum.MQ_RETRY_SEND.getJobTypeCode())
+//                .execTimes(0L)
+//                .failRetryTimes(5L)
+//                .execInterval(5L)
+//                .shardingMark(1L)
+//                .execStatus(ExecStatusEnum.READY.getExecStatusCode())
+//                .nextExecTime(new Date())
+//                .build();
+//
+//        payJobDetailManager.addJobDetail(payJobDetailDO);
     }
 }

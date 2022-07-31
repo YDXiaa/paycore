@@ -3,9 +3,9 @@ package paydemo.manager.remote.thirdpay;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import paydemo.common.KeyCreator;
 import paydemo.common.RemotePayResult;
 import paydemo.manager.model.RemoteRequestModel;
+import paydemo.util.KeyCreator;
 
 /**
  * @auther YDXiaa

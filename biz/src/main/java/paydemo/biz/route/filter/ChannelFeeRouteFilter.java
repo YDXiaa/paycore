@@ -3,12 +3,12 @@ package paydemo.biz.route.filter;
 import org.springframework.stereotype.Component;
 import paydemo.common.BillingTypeEnum;
 import paydemo.common.FeeCalModeEnum;
-import paydemo.common.FlagsEnum;
 import paydemo.common.SortPriorityEnum;
 import paydemo.common.exception.PayException;
 import paydemo.common.exception.ResponseCodeEnum;
 import paydemo.manager.model.ChannelDetailInfoBO;
 import paydemo.manager.model.PayBaseInfoBO;
+import paydemo.util.FlagsEnum;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 /**
  * @auther YDXiaa
  * <p>
- * 账户处理.
+ * 账户资金处理.
  */
 @Service
 public class AccountRemoteService {

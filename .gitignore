@@ -1,20 +1,34 @@
-/*/target/*
+# Compiled class file
 *.class
+target/
+
+## Git file lock #
 *.lock
 *.DS_Store
 *.swp
 *.out
-target/
-*.iml
 *.ipr
 *.iws
 *.bak
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+### idea eclipse gradle###
 .settings/
 .classpath
 .project
 .metadata/
 .idea/
-*.log
-*.lnk
 .eclipse/
 .gradle/
+*.iml
+
+## log file ###
+*.log
+*.lnk

@@ -1,16 +1,17 @@
 package paydemo.manager.db;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import paydemo.common.PayStatusEnum;
 import paydemo.common.SysConstant;
 import paydemo.dao.dbmodel.PayFundDO;
 import paydemo.dao.mapper.PayFundMapper;
 import paydemo.dao.mapper.TableNameHelper;
-import paydemo.manager.helper.BeanCopier;
 import paydemo.manager.model.PayFundBO;
+import paydemo.util.PayStatusEnum;
 
 import java.util.Date;
 import java.util.List;
@@ -68,22 +69,74 @@ public class PayFundManager {
      * @param payFundBO 支付资金单单DO.
      * @return 修改数量.
      */
-    public int modifyPayFundStatus(PayFundBO payFundBO,PayStatusEnum origPayStatusEnum) {
+    public int modifyPayFundStatus(PayFundBO payFundBO, PayStatusEnum origPayStatusEnum) {
 
-        PayFundDO payFundDO = BeanCopier.objCopy(payFundBO,PayFundDO.class);
+        PayFundDO payFundDO = BeanUtil.copyProperties(payFundBO, PayFundDO.class);
 
         TableNameHelper.setShardingMark(payFundDO.getPayFundNo());
         LambdaUpdateWrapper<PayFundDO> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.set(PayFundDO::getPayStatus, payFundDO.getPayStatus())
-                .set(Objects.nonNull(payFundDO.getOutRequestSeqNo()),PayFundDO::getOutRequestSeqNo,payFundDO.getOutRequestSeqNo())
-                .set(Objects.nonNull(payFundDO.getOutRespSeqNo()),PayFundDO::getOutRespSeqNo,payFundDO.getOutRespSeqNo())
-                .set(Objects.nonNull(payFundDO.getChannelDetailNo()),PayFundDO::getChannelDetailNo,payFundDO.getChannelDetailNo())
-                .set(Objects.nonNull(payFundDO.getChannelFeeAmt()),PayFundDO::getChannelFeeAmt,payFundDO.getChannelFeeAmt())
+                .set(Objects.nonNull(payFundDO.getOutRequestSeqNo()), PayFundDO::getOutRequestSeqNo, payFundDO.getOutRequestSeqNo())
+                .set(Objects.nonNull(payFundDO.getOutRespSeqNo()), PayFundDO::getOutRespSeqNo, payFundDO.getOutRespSeqNo())
+                .set(Objects.nonNull(payFundDO.getChannelDetailNo()), PayFundDO::getChannelDetailNo, payFundDO.getChannelDetailNo())
+                .set(Objects.nonNull(payFundDO.getChannelFeeAmt()), PayFundDO::getChannelFeeAmt, payFundDO.getChannelFeeAmt())
                 .set(PayFundDO::getUpdateDate, new Date())
                 .set(PayFundDO::getUpdateUser, SysConstant.SYS_USER)
                 .eq(PayFundDO::getPayFundNo, payFundDO.getPayFundNo())
-                .eq(PayFundDO::getPayStatus,origPayStatusEnum.getStatusCode()); // 乐观锁.
+                .eq(PayFundDO::getPayStatus, origPayStatusEnum.getStatusCode()); // 乐观锁.
 
         return payFundMapper.update(payFundDO, updateWrapper);
+    }
+
+    /**
+     * 查询支付资金单.
+     *
+     * @param payFundNo 支付资金单.
+     * @return 支付资金单.
+     */
+    public PayFundDO queryPayFund(String payFundNo) {
+
+        TableNameHelper.setShardingMark(payFundNo);
+
+        LambdaQueryWrapper<PayFundDO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(PayFundDO::getPayFundNo, payFundNo);
+
+        return payFundMapper.selectOne(queryWrapper);
+    }
+
+    /**
+     * 支付资金单.
+     *
+     * @param payNo 支付单号.
+     * @return 支付资金单.
+     */
+    public List<PayFundDO> queryPayFundListByPayNo(String payNo) {
+
+        LambdaQueryWrapper<PayFundDO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(PayFundDO::getPayNo, payNo);
+
+        TableNameHelper.setShardingMark(payNo);
+
+        return payFundMapper.selectList(queryWrapper);
+    }
+
+    /**
+     * 批量修改退款单信息.
+     *
+     * @param origModifyPayFundList 原支付信息.
+     */
+    public void batchModifyRefundFund(List<PayFundDO> origModifyPayFundList) {
+
+        origModifyPayFundList.forEach(payFundDO -> {
+
+            TableNameHelper.setShardingMark(payFundDO.getPayFundNo());
+            LambdaUpdateWrapper<PayFundDO> updateWrapper = new LambdaUpdateWrapper<>();
+            updateWrapper.set(PayFundDO::getRefundAmt, payFundDO.getRefundAmt())
+                    .set(PayFundDO::getUpdateDate, new Date())
+                    .set(PayFundDO::getUpdateUser, SysConstant.SYS_USER)
+                    .eq(PayFundDO::getPayFundNo, payFundDO.getPayFundNo());
+
+            payFundMapper.update(payFundDO, updateWrapper);
+        });
     }
 }

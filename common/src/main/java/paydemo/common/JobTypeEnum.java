@@ -20,7 +20,12 @@ public enum JobTypeEnum {
     /**
      * MQ消息重试.
      */
-    MQ_RETRY_SEND("MQ_RETRY_SEND","MQ消息重试"),
+    MQ_RETRY_SEND("MQ_RETRY_SEND", "MQ消息重试"),
+
+    /**
+     * 异步退款.
+     */
+    ASYNC_REFUND("ASYNC_REFUND","异步退款"),
     ;
 
     /**
@@ -32,4 +37,22 @@ public enum JobTypeEnum {
      * JobTypeDesc.
      */
     private final String jobTypeDesc;
+
+
+    /**
+     * 获取匹配JobType.
+     *
+     * @param jobTypeCode jobTypeCode.
+     * @return jobType.
+     */
+    public static JobTypeEnum match(String jobTypeCode) {
+
+        for (JobTypeEnum jobTypeEnum : JobTypeEnum.values()) {
+            if (jobTypeEnum.getJobTypeCode().equals(jobTypeCode)) {
+                return jobTypeEnum;
+            }
+        }
+
+        return null;
+    }
 }

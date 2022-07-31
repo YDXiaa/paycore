@@ -39,4 +39,34 @@ public class PayFundRequestDTO implements Serializable {
      */
     private String bizType;
 
+    /**
+     * 外部授权userId.
+     */
+    private String extAuthUserId;
+
+    /**
+     * 代金券号.
+     */
+    private String couponNo;
+
+    /**
+     * 客户关联账户编号.
+     */
+    private String payerCustomerAccNo;
+
+    /**
+     * 账户分类.
+     */
+    private String payerAccClassify;
+
+    /**
+     * 客户类型.
+     */
+    private String payerAccType;
+
+    /**
+     * 账户号.
+     */
+    private String payerAccNo;
+
 }

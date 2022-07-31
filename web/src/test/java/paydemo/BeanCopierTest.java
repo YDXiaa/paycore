@@ -1,8 +1,8 @@
 package paydemo;
 
+import cn.hutool.core.bean.BeanUtil;
 import org.junit.Test;
 import paydemo.dao.dbmodel.PayOrderDO;
-import paydemo.manager.helper.BeanCopier;
 import paydemo.manager.model.PayOrderBO;
 
 /**
@@ -19,7 +19,7 @@ public class BeanCopierTest extends BaseSpringBootSupport {
         PayOrderBO payOrderBO = new PayOrderBO();
         payOrderBO.setPayNo("abc");
 
-        PayOrderDO payOrderDO = BeanCopier.objCopy(payOrderBO, PayOrderDO.class);
+        PayOrderDO payOrderDO = BeanUtil.copyProperties(payOrderBO, PayOrderDO.class);
 
         System.out.println(payOrderDO);
     }

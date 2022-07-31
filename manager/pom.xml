@@ -32,6 +32,12 @@
             <artifactId>common</artifactId>
         </dependency>
 
+        <!-- Util-->
+        <dependency>
+            <groupId>paydemo</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

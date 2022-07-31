@@ -1,8 +1,8 @@
 package paydemo.manager.remote.marketing;
 
 import org.springframework.stereotype.Service;
-import paydemo.common.PayStatusEnum;
 import paydemo.common.RemotePayResult;
+import paydemo.util.PayStatusEnum;
 
 /**
  * @auther YDXiaa

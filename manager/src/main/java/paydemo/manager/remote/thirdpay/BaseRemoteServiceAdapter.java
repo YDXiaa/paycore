@@ -2,8 +2,10 @@ package paydemo.manager.remote.thirdpay;
 
 import org.apache.dubbo.rpc.RpcException;
 import paydemo.common.RemotePayResult;
+import paydemo.common.exception.ResponseCodeEnum;
 import paydemo.manager.model.RemoteRequestModel;
 import paydemo.paygateway.facade.model.GatewayPayResponse;
+import paydemo.util.PayStatusEnum;
 
 /**
  * @auther YDXiaa
@@ -63,5 +65,46 @@ public interface BaseRemoteServiceAdapter<T, R extends GatewayPayResponse> {
         }
 
         return false;
+    }
+
+
+    /**
+     * 调用异常处理(收单业务场景exceptionFail异常当成失败).
+     *
+     * @param throwable 异常信息.
+     * @return 网关支付响应对象.
+     */
+    default GatewayPayResponse invokeException(Throwable throwable) {
+        return invokeException(throwable, true);
+    }
+
+    /**
+     * 调用异常处理.
+     *
+     * @param throwable     异常信息.
+     * @param exceptionFail 非超时调用异常当成失败处理.
+     * @return 网关支付响应对象.
+     */
+    default GatewayPayResponse invokeException(Throwable throwable, boolean exceptionFail) {
+
+        GatewayPayResponse payResponse = new GatewayPayResponse();
+
+        if (invokeTimeOut(throwable)) {
+            payResponse.setPayStatus(PayStatusEnum.PAYING.getStatusCode());
+            payResponse.setResultCode(ResponseCodeEnum.REQUEST_CHANNEL_TIMEOUT.getRespCode());
+            payResponse.setResultDesc(ResponseCodeEnum.REQUEST_CHANNEL_TIMEOUT.getRespDesc());
+        } else {
+            // 异常失败.
+            if (exceptionFail) {
+                payResponse.setPayStatus(PayStatusEnum.FAIL.getStatusCode());
+            } else {
+                payResponse.setPayStatus(PayStatusEnum.PAYING.getStatusCode());
+            }
+
+            payResponse.setResultCode(ResponseCodeEnum.REQUEST_CHANNEL_EXCEPTION.getRespCode());
+            payResponse.setResultDesc(ResponseCodeEnum.REQUEST_CHANNEL_EXCEPTION.getRespDesc());
+        }
+
+        return payResponse;
     }
 }
